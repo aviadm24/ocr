@@ -11,11 +11,17 @@
     <input type="file" name="image">
     <button type="submit">Upload</button>
   </form>
+
+  {% if cheshbonit %}
+  {% autoescape off %}
+    <p>{{ cheshbonit|linebreaks }}</p>
+  {% endautoescape %}
+  {% endif %}
+
   <table>
       <thead>
       <th>file</th>
       <th>ocr</th>
-      <th>חשבונית</th>
       </thead>
       <tbody>
       <tr>
@@ -29,13 +35,6 @@
               {% if text %}
               {% autoescape off %}
                 <p>{{ text|linebreaks }}</p>
-              {% endautoescape %}
-              {% endif %}
-          </td>
-          <td>
-              {% if cheshbonit %}
-              {% autoescape off %}
-                <p>{{ cheshbonit|linebreaks }}</p>
               {% endautoescape %}
               {% endif %}
           </td>
