@@ -83,13 +83,13 @@ def image_upload(request):
             print(uploaded_file_url)
             # print('ocr text: ', cheshbonit)
         else:
-            image_path = os.path.join(cpath, '/static/')
+            image_path = os.path.join(cpath, 'ocr/static/')
             # for filename in os.listdir(image_path):
             #     print('file: ', filename)
             #     os.remove(os.path.join(image_path, filename))
 
             fs = FileSystemStorage()
-            filename = fs.save('/static/' + myfile.name, myfile)
+            filename = fs.save('ocr/static/' + myfile.name, myfile)
             for f in os.listdir(image_path):
                 print('file: ', f)
             uploaded_file_url = fs.url(filename)
