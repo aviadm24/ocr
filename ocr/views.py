@@ -96,7 +96,7 @@ def image_upload(request):
             print(uploaded_file_url)
             text = plain_ocr(uploaded_file_url)
             cheshbonit = close_match(text)
-            uploaded_file_url = '/'.join(fs.url(filename).split('/')[-1])
+            # uploaded_file_url = '/'.join(fs.url(filename).split('/')[-1])
             print(uploaded_file_url)
             # print('ocr text: ', cheshbonit)
         return render(request, 'ocr/image_upload.html', {
