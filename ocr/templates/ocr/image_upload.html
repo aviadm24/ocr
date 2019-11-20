@@ -28,7 +28,7 @@
           <td>
               {% if uploaded_file_url %}
                 <p>File uploaded at: <a href="{% static uploaded_file_url %}">{{ uploaded_file_url }}</a></p>
-                <img src="{% static uploaded_file_url %}" height="1000" width="800">
+                <img src="{{uploaded_file_url}}" height="1000" width="800">
               {% endif %}
           </td>
           <td>

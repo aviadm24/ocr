@@ -85,6 +85,7 @@ def image_upload(request):
         else:
             image_path = os.path.join(cpath, 'ocr/static/')
             for filename in os.listdir(image_path):
+                print('file: ', filename)
                 os.remove(os.path.join(image_path, filename))
 
             fs = FileSystemStorage()
