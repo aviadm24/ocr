@@ -90,8 +90,8 @@ def image_upload(request):
 
             fs = FileSystemStorage()
             filename = fs.save('ocr/static/' + myfile.name, myfile)
-            for filename in os.listdir(image_path):
-                print('file: ', filename)
+            for f in os.listdir(image_path):
+                print('file: ', f)
             uploaded_file_url = fs.url(filename)
             print(uploaded_file_url)
             text = plain_ocr(uploaded_file_url)
