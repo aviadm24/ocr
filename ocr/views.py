@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 import difflib
 import os
 from dateutil.parser import parse
-
+from django.conf import settings
 
 def is_date(string, fuzzy=False):
     """
@@ -68,19 +68,34 @@ def image_upload(request):
     if request.method == 'POST' and request.FILES['image']:
         myfile = request.FILES['image']
         cpath = os.getcwd()
-        image_path = os.path.join(cpath, 'ocr/static/images/')
-        for filename in os.listdir(image_path):
-            os.remove(os.path.join(image_path, filename))
+        if settings.APP == 'dev':
+            image_path = os.path.join(cpath, 'ocr/static/images/')
+            for filename in os.listdir(image_path):
+                os.remove(os.path.join(image_path, filename))
 
-        fs = FileSystemStorage()
-        filename = fs.save('ocr/static/images/'+myfile.name, myfile)
-        uploaded_file_url = fs.url(filename)
-        print(uploaded_file_url)
-        text = plain_ocr(uploaded_file_url)
-        cheshbonit = close_match(text)
-        # uploaded_file_url = '/'.join(fs.url(filename).split('/')[2:])
-        print(uploaded_file_url)
-        # print('ocr text: ', cheshbonit)
+            fs = FileSystemStorage()
+            filename = fs.save('ocr/static/images/'+myfile.name, myfile)
+            uploaded_file_url = fs.url(filename)
+            print(uploaded_file_url)
+            text = plain_ocr(uploaded_file_url)
+            cheshbonit = close_match(text)
+            # uploaded_file_url = '/'.join(fs.url(filename).split('/')[2:])
+            print(uploaded_file_url)
+            # print('ocr text: ', cheshbonit)
+        else:
+            image_path = os.path.join(cpath, 'ocr/static/images/')
+            for filename in os.listdir(image_path):
+                os.remove(os.path.join(image_path, filename))
+
+            fs = FileSystemStorage()
+            filename = fs.save('ocr/static/images/' + myfile.name, myfile)
+            uploaded_file_url = fs.url(filename)
+            print(uploaded_file_url)
+            text = plain_ocr(uploaded_file_url)
+            cheshbonit = close_match(text)
+            # uploaded_file_url = '/'.join(fs.url(filename).split('/')[2:])
+            print(uploaded_file_url)
+            # print('ocr text: ', cheshbonit)
         return render(request, 'ocr/image_upload.html', {
             'text': text,
             'cheshbonit': str(cheshbonit),
