@@ -118,7 +118,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-ipaddress = socket.gethostbyname(socket.gethostbyname())
+
+ipaddress = socket.gethostbyname(socket.gethostname())
 if not ipaddress.startswith('172'):
     APP = 'dev'
 else:
