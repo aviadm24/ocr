@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,5 +8,6 @@
 <body>
 <h2> Invoice OCR</h2>
 <a href="/image_upload">image upload</a>
+<img src="{% static 'images/words.jpg' %}">
 </body>
 </html>

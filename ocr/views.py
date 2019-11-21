@@ -47,8 +47,8 @@ def close_match(text):
     for invoice_kind in INVOICE_WORD_LIST:
         found = difflib.get_close_matches(invoice_kind, word_list)
         # print('difflib: ', found)
-        if found:
-            found_indexs = [i for i, val in enumerate(word_list) if val == found[0]]
+        for f in found:
+            found_indexs = [i for i, val in enumerate(word_list) if val == f]
             for indx in found_indexs:
                 for word in word_list[indx: indx + 5]:
                     # print('invoice: ', word)
