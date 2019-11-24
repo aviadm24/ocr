@@ -57,6 +57,7 @@ def close_match(text):
                             answers.append(('קשור לתאריך '+invoice_kind, word))
                         elif len(word) > 4:
                             answers.append((invoice_kind, word))
+    print(answers)
     return answers
 
     # return difflib.get_close_matches(INVOICE_WORD_LIST, word_list)
