@@ -7,6 +7,8 @@ import difflib
 import os
 from dateutil.parser import parse
 from django.conf import settings
+from django.http import JsonResponse
+import json
 
 def is_date(string, fuzzy=False):
     """
@@ -86,4 +88,21 @@ def image_upload(request):
             'uploaded_file_url': uploaded_file_url
         })
     return render(request, 'ocr/image_upload.html')
+
+
+@csrf_exempt
+def ocr_output(request):
+    if request.method == 'POST' and request.FILES['image']:
+        myfile = request.FILES['image']
+        text = plain_ocr(myfile)
+        data = {"ocr-text": text}
+        json_data = json.dumps(data, ensure_ascii=False).encode('utf8')
+        # print(json_data)
+        return JsonResponse(json.dumps(data, ensure_ascii=False), safe=False)
+        # return render(request, 'ocr/image_upload.html', {
+        #     'text': text,
+        # })
+
+
+    return render(request, 'ocr/ocr_output.html')
 
