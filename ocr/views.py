@@ -76,6 +76,7 @@ def image_upload(request):
         cpath = os.getcwd()
         image_path = os.path.join(cpath, 'ocr/static/images/')
         for filename in os.listdir(image_path):
+            # todo except dummy file
             os.remove(os.path.join(image_path, filename))
         fs = FileSystemStorage()
         filename = fs.save('ocr/static/images/'+myfile.name, myfile)
