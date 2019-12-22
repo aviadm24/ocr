@@ -116,7 +116,6 @@ def ocr_output(request):
         text = plain_ocr(myfile)
         data = {"ocr-text": text}
         json_data = json.dumps(data, ensure_ascii=False).encode('utf8')
-        # print(json_data)
         return JsonResponse(json.dumps(data, ensure_ascii=False), safe=False)
         # return render(request, 'ocr/image_upload.html', {
         #     'text': text,
