@@ -102,6 +102,7 @@ def get_params(request):
     uploaded_file_url = os.path.join('ocr/static/images/', image_file[-1])
     print('uploaded_file_url: ', uploaded_file_url)
     answers = data(uploaded_file_url)
+    #  https://stackoverflow.com/questions/8018973/how-to-iterate-through-dictionary-in-a-dictionary-in-django-template
     return render(request, 'ocr/image_upload.html', {
         'answers': answers
             })

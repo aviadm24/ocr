@@ -24,7 +24,9 @@ google-auth-httplib2==0.0.3
 gunicorn==19.4.5
 httplib2==0.14.0
 jmespath==0.9.3
+numpy==1.17.4
 oauthlib==1.0.3
+opencv-python==4.1.2.30
 pathspec==0.5.0
 Pillow==5.4.1
 psycopg2==2.7.4
