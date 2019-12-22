@@ -9,6 +9,8 @@ from dateutil.parser import parse
 from django.conf import settings
 from django.http import JsonResponse
 import json
+from .ocr_functions import data
+
 
 def is_date(string, fuzzy=False):
     """
@@ -33,12 +35,13 @@ def home(request):
     return render(request, template_name='ocr/home.html')
 
 
-def plain_ocr(filename):
-    text = pytesseract.image_to_string(Image.open(filename), lang='eng+heb')
-    # for i in text.split('/n'):
-        # print(i)
-    # with open('after_clean7.txt', 'w', encoding='utf8') as f:
-    #     f.write(text)
+def plain_ocr(handler, lang):
+    text = pytesseract.image_to_string(handler, lang=lang)  # 'eng+heb'
+    return text
+
+
+def digits(handler):
+    text = pytesseract.image_to_string(handler, config='digits')
     return text
 
 
@@ -72,22 +75,36 @@ def image_upload(request):
         myfile = request.FILES['image']
         cpath = os.getcwd()
         image_path = os.path.join(cpath, 'ocr/static/images/')
-        # for filename in os.listdir(image_path):
-        #     os.remove(os.path.join(image_path, filename))
+        for filename in os.listdir(image_path):
+            os.remove(os.path.join(image_path, filename))
         fs = FileSystemStorage()
         filename = fs.save('ocr/static/images/'+myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
         print(uploaded_file_url)
-        text = plain_ocr(uploaded_file_url)
-        cheshbonit = close_match(text)
+        handler = Image.open(uploaded_file_url)
+        text = plain_ocr(handler, 'heb')
+        nums = digits(handler)
+        print(nums)
+        # cheshbonit = close_match(text)
         uploaded_file_url = '/'.join(fs.url(filename).split('/')[2:])
         print(uploaded_file_url)
         return render(request, 'ocr/image_upload.html', {
             'text': text,
-            'cheshbonit': str(cheshbonit),
+            'nums': nums,
+            # 'cheshbonit': str(cheshbonit),
             'uploaded_file_url': uploaded_file_url
         })
     return render(request, 'ocr/image_upload.html')
+
+
+def get_params(request):
+    image_file = os.listdir('ocr/static/images/')
+    uploaded_file_url = os.path.join('ocr/static/images/', image_file[-1])
+    print('uploaded_file_url: ', uploaded_file_url)
+    answers = data(uploaded_file_url)
+    return render(request, 'ocr/image_upload.html', {
+        'answers': answers
+            })
 
 
 @csrf_exempt
@@ -102,7 +119,6 @@ def ocr_output(request):
         # return render(request, 'ocr/image_upload.html', {
         #     'text': text,
         # })
-
 
     return render(request, 'ocr/ocr_output.html')
 

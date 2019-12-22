@@ -22,6 +22,7 @@
       <thead>
       <th>file</th>
       <th>ocr</th>
+      <th>nums</th>
       </thead>
       <tbody>
       <tr>
@@ -37,6 +38,13 @@
               {% if text %}
               {% autoescape off %}
                 <p>{{ text|linebreaks }}</p>
+              {% endautoescape %}
+              {% endif %}
+          </td>
+          <td>
+              {% if nums %}
+              {% autoescape off %}
+                <p>{{ nums|linebreaks }}</p>
               {% endautoescape %}
               {% endif %}
           </td>
