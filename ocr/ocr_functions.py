@@ -76,7 +76,7 @@ def most_common(lst):
 
 
 def close_match(text, answers, cache):
-    print('\ntext: ', text)
+    # print('\ntext: ', text)
     date = False
     email = False
     tel = False
@@ -107,9 +107,9 @@ def close_match(text, answers, cache):
         if key_ratio != [] and num_list != []:
             avr = mean(key_ratio)
             common_num = most_common(num_list)
-            print('\n key: ', key)
-            print("common_num: ", common_num)
-            print("avr: ", avr)
+            # print('\n key: ', key)
+            # print("common_num: ", common_num)
+            # print("avr: ", avr)
             if avr > cache[key]:
                 answers[key] = (avr, common_num)
             cache[key] = avr
@@ -120,7 +120,9 @@ def close_match(text, answers, cache):
 
 def data(img_file):
     # https://stackoverflow.com/questions/20831612/getting-the-bounding-box-of-the-recognized-words-using-python-tesseract
-    img = cv2.imread('images/8.jpg')
+    # img = cv2.imread('images/8.jpg')
+    img = cv2.imread(img_file)
+
     d = pytesseract.image_to_data(img, lang='heb', output_type=Output.DICT)
     n_boxes = len(d['text'])
     # print(d.keys())
@@ -142,6 +144,6 @@ def data(img_file):
         # print("line number: ", line_num)
         if line != []:
             close_match(' '.join(line), answers, cache)
-    print('answers: ', answers)
+    # print('answers: ', answers)
     return answers
 

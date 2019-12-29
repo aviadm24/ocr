@@ -62,7 +62,7 @@ def close_match(text):
                             answers.append(('קשור לתאריך '+invoice_kind, word))
                         elif len(word) > 4:
                             answers.append((invoice_kind, word))
-    print(answers)
+    # print(answers)
     return answers
 
     # return difflib.get_close_matches(INVOICE_WORD_LIST, word_list)
@@ -71,6 +71,15 @@ def close_match(text):
 # https://stackoverflow.com/questions/53363547/how-to-deploy-pytesseract-to-heroku
 @csrf_exempt
 def image_upload(request):
+    if request.is_ajax():
+        image_file = os.listdir('ocr/static/images/')
+        uploaded_file_url = os.path.join('ocr/static/images/', image_file[0])
+        print('uploaded_file_url: ', uploaded_file_url)
+        answers = data(uploaded_file_url)
+        #  https://stackoverflow.com/questions/8018973/how-to-iterate-through-dictionary-in-a-dictionary-in-django-template
+        return render(request, 'ocr/image_upload.html', {
+            'answers': answers
+        })
     if request.method == 'POST' and request.FILES['image']:
         myfile = request.FILES['image']
         cpath = os.getcwd()
@@ -81,11 +90,11 @@ def image_upload(request):
         fs = FileSystemStorage()
         filename = fs.save('ocr/static/images/'+myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
-        print(uploaded_file_url)
+        # print(uploaded_file_url)
         handler = Image.open(uploaded_file_url)
         text = plain_ocr(handler, 'heb')
         nums = digits(handler)
-        print(nums)
+        # print(nums)
         # cheshbonit = close_match(text)
         uploaded_file_url = '/'.join(fs.url(filename).split('/')[2:])
         print(uploaded_file_url)
@@ -95,12 +104,13 @@ def image_upload(request):
             # 'cheshbonit': str(cheshbonit),
             'uploaded_file_url': uploaded_file_url
         })
+
     return render(request, 'ocr/image_upload.html')
 
 
 def get_params(request):
     image_file = os.listdir('ocr/static/images/')
-    uploaded_file_url = os.path.join('ocr/static/images/', image_file[-1])
+    uploaded_file_url = os.path.join('ocr/static/images/', image_file[0])
     print('uploaded_file_url: ', uploaded_file_url)
     answers = data(uploaded_file_url)
     #  https://stackoverflow.com/questions/8018973/how-to-iterate-through-dictionary-in-a-dictionary-in-django-template
@@ -113,7 +123,9 @@ def get_params(request):
 def ocr_output(request):
     if request.method == 'POST' and request.FILES['image']:
         myfile = request.FILES['image']
-        text = plain_ocr(myfile)
+        # print(myfile)
+        image = Image.open(myfile)
+        text = plain_ocr(image, 'heb')
         data = {"ocr-text": text}
         json_data = json.dumps(data, ensure_ascii=False).encode('utf8')
         return JsonResponse(json.dumps(data, ensure_ascii=False), safe=False)
