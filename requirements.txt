@@ -21,7 +21,7 @@ docutils==0.13.1
 google-api-python-client==1.7.11
 google-auth==1.6.3
 google-auth-httplib2==0.0.3
-gunicorn==19.4.5
+gunicorn==19.5.0
 httplib2==0.14.0
 jmespath==0.9.3
 numpy==1.17.4
