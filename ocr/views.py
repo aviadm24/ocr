@@ -82,11 +82,7 @@ def image_upload(request):
 
         return HttpResponse(json.dumps(json_response),
                             content_type='application/json')
-        #  https://stackoverflow.com/questions/8018973/how-to-iterate-through-dictionary-in-a-dictionary-in-django-template
-        # return redirect('ocr/image_upload.html', {
-        #     'answers': answers,
-        #     'test': 'trest'
-        # })
+
     if request.method == 'POST' and request.FILES['image']:
         myfile = request.FILES['image']
         cpath = os.getcwd()
@@ -97,12 +93,9 @@ def image_upload(request):
         fs = FileSystemStorage()
         filename = fs.save('ocr/static/images/'+myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
-        # print(uploaded_file_url)
         handler = Image.open(uploaded_file_url)
         text = plain_ocr(handler, 'heb')
         nums = digits(handler)
-        # print(nums)
-        # cheshbonit = close_match(text)
         uploaded_file_url = '/'.join(fs.url(filename).split('/')[2:])
         print(uploaded_file_url)
         return render(request, 'ocr/image_upload.html', {
@@ -134,11 +127,8 @@ def ocr_output(request):
         image = Image.open(myfile)
         text = plain_ocr(image, 'heb')
         data = {"ocr-text": text}
-        json_data = json.dumps(data, ensure_ascii=False).encode('utf8')
+        # json_data = json.dumps(data, ensure_ascii=False).encode('utf8')
         return JsonResponse(json.dumps(data, ensure_ascii=False), safe=False)
-        # return render(request, 'ocr/image_upload.html', {
-        #     'text': text,
-        # })
 
     return render(request, 'ocr/ocr_output.html')
 
