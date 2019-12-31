@@ -7,7 +7,13 @@ $(document).ready(function() {
                      data: data,
                      processData: false,
                      contentType: false,
-                     success: console.log("success")
+                     success: function(data) {
+                        $.each(data.answers, function(i, val) {
+                          console.log(i)
+                          $("#" + i).html(val[0] + " - " + val[1]);
+                        });
+                        console.log(data.answers)
+                    }
                  })
              });
          });

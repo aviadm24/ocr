@@ -7,7 +7,9 @@ botocore==1.5.82
 braintree==3.25.0
 cachetools==3.1.1
 cement==2.8.2
+certifi==2019.11.28
 cffi==1.12.3
+chardet==3.0.4
 colorama==0.3.7
 cryptography==2.7
 defusedxml==0.5.0
@@ -21,14 +23,15 @@ docutils==0.13.1
 google-api-python-client==1.7.11
 google-auth==1.6.3
 google-auth-httplib2==0.0.3
-gunicorn==19.4.5
+gunicorn==20.0.4
 httplib2==0.14.0
+idna==2.8
 jmespath==0.9.3
 numpy==1.17.4
 oauthlib==1.0.3
 opencv-python==4.1.2.30
 pathspec==0.5.0
-Pillow==5.4.1
+Pillow==6.2.1
 psycopg2==2.7.4
 pyasn1==0.4.7
 pyasn1-modules==0.2.6
@@ -39,8 +42,8 @@ python-dateutil==2.6.1
 python-social-auth==0.2.14
 python3-openid==3.0.10
 pytz==2017.2
-PyYAML==3.12
-requests==2.9.1
+PyYAML==5.2
+requests==2.22.0
 requests-oauthlib==0.6.1
 rsa==4.0
 semantic-version==2.5.0
@@ -51,6 +54,7 @@ sqlparse==0.3.0
 tabulate==0.7.5
 termcolor==1.1.0
 uritemplate==3.0.0
+urllib3==1.25.7
 wcwidth==0.1.7
 websocket-client==0.44.0
 whitenoise==4.1.4

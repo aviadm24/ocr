@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import pytesseract
 from PIL import Image
 from django.core.files.storage import FileSystemStorage
@@ -7,9 +7,10 @@ import difflib
 import os
 from dateutil.parser import parse
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+
 import json
-from .ocr_functions import data
+from .ocr_functions import data, word_list_dict
 
 
 def is_date(string, fuzzy=False):
@@ -76,10 +77,16 @@ def image_upload(request):
         uploaded_file_url = os.path.join('ocr/static/images/', image_file[0])
         print('uploaded_file_url: ', uploaded_file_url)
         answers = data(uploaded_file_url)
+        print(answers)
+        json_response = {'answers': answers}
+
+        return HttpResponse(json.dumps(json_response),
+                            content_type='application/json')
         #  https://stackoverflow.com/questions/8018973/how-to-iterate-through-dictionary-in-a-dictionary-in-django-template
-        return render(request, 'ocr/image_upload.html', {
-            'answers': answers
-        })
+        # return redirect('ocr/image_upload.html', {
+        #     'answers': answers,
+        #     'test': 'trest'
+        # })
     if request.method == 'POST' and request.FILES['image']:
         myfile = request.FILES['image']
         cpath = os.getcwd()
@@ -101,7 +108,7 @@ def image_upload(request):
         return render(request, 'ocr/image_upload.html', {
             'text': text,
             'nums': nums,
-            # 'cheshbonit': str(cheshbonit),
+            'answers': word_list_dict,
             'uploaded_file_url': uploaded_file_url
         })
 

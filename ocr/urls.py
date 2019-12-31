@@ -20,7 +20,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home),
-    path('image_upload/', views.image_upload),
+    path('image_upload/', views.image_upload, name='upload'),
     path('get_params/', views.get_params),
     path('ocr_output/', views.ocr_output)
 ]
