@@ -10,7 +10,7 @@ from django.conf import settings
 from django.http import JsonResponse, HttpResponse
 
 import json
-from .ocr_functions import data, word_list_dict
+from .ocr_functions import data, word_list_dict, heb_digit
 
 
 def is_date(string, fuzzy=False):
@@ -106,6 +106,18 @@ def image_upload(request):
         })
 
     return render(request, 'ocr/image_upload.html')
+
+@csrf_exempt
+def merge(request):
+    if request.is_ajax():
+        image_file = os.listdir('ocr/static/images/')
+        uploaded_file_url = os.path.join('ocr/static/images/', image_file[0])
+        merge = heb_digit(uploaded_file_url)
+        print('merge \n:', merge)
+        json_response = {'merge': merge}
+
+        return HttpResponse(json.dumps(json_response),
+                            content_type='application/json')
 
 
 def get_params(request):

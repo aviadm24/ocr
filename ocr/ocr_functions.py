@@ -30,13 +30,20 @@ def is_num(text):
 # is_num(' סנטר א:א.ג בע"מ ח.פ. 515906196 עמ 518906196      8 טנטר 3   סה"כ לתשלום: 52,782.00')
 
 
-def is_date(string, fuzzy=True):
-    try:
-        parse(string, fuzzy=fuzzy)
-        return True
 
-    except ValueError:
+def is_date(text):
+    r = re.compile(r'(^[0-9]+/[0-9]+/[0-9]+$)')
+    if re.findall(r, text):
+        return True
+    else:
         return False
+# def is_date(string, fuzzy=True):
+#     try:
+#         parse(string, fuzzy=fuzzy)
+#         return True
+#
+#     except ValueError:
+#         return False
 
 
 def closest_num(text, word, date, email, tel, url):
@@ -147,3 +154,38 @@ def data(img_file):
     # print('answers: ', answers)
     return answers
 
+
+def heb_digit(img_file):
+    img = cv2.imread(img_file)
+    heb = pytesseract.image_to_data(img, lang='heb', output_type=Output.DICT)
+    digit = pytesseract.image_to_data(img, config='digits', output_type=Output.DICT)
+
+    heb_boxes = len(heb['text'])
+    digit_boxes = len(digit['text'])
+    # print(heb_boxes, ' - ', digit_boxes)
+    lines = []
+    for i in range(heb_boxes):
+        for j in range(digit_boxes):
+
+            # (x, y, w, h) = (digit['left'][i], digit['top'][i], digit['width'][i], digit['height'][i])
+
+            text_pixels = (heb['left'][i], heb['top'][i], heb['width'][i], heb['height'][i])
+            digit_pixels = (digit['left'][j], digit['top'][j], digit['width'][j], digit['height'][j])
+            if digit_pixels == text_pixels:
+                text = heb['text'][i]
+                num = digit['text'][j]
+                if text != '':
+                    # print('text: ', heb['text'][i], ' - digit: ', digit['text'][j])
+                    if is_date(text):
+                        lines.append(text)
+                    else:
+                        try:
+                            if float(num):
+                                lines.append(num)
+                                lines.append('\n')
+                        except ValueError:
+                            lines.append(text)
+    # print(' '.join(lines))
+    b = ' '.join(lines)
+    lines = b.split('\n')
+    return lines

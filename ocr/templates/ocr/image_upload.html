@@ -10,6 +10,7 @@
   <div>
       <a href="/">Return to home</a>
       <button id="getparams">get parameters</button>
+      <button id="merge">get merge</button>
   </div>
 
   <form method="post" enctype="multipart/form-data">
@@ -24,18 +25,30 @@
   {% endautoescape %}
   {% endif %}
 
-  <h1>טבלת פרמטרים דיוק באחוזים</h1>
   {% if answers %}
   <table>
+  <thead>
+    <th>merge</th>
+    <th>טבלת פרמטרים דיוק באחוזים</th>
+  </thead>
   <tbody>
-  {% autoescape off %}
-    {% for key, value in answers.items %}
-    <tr>
-        <td> {{ key }} : </td>
-        <td id="{{key}}"></td>
-    </tr>
-    {% endfor %}
-  {% endautoescape %}
+  <tr>
+      <td id=""></td>
+      <td>
+          <table>
+              <tbody>
+                  {% autoescape off %}
+                    {% for key, value in answers.items %}
+                    <tr>
+                        <td> {{ key }} : </td>
+                        <td id="{{key}}"></td>
+                    </tr>
+                    {% endfor %}
+                  {% endautoescape %}
+              </tbody>
+          </table>
+      </td>
+  </tr>
   </tbody>
   </table>
   {% endif %}
@@ -46,6 +59,7 @@
       <th>file</th>
       <th>ocr</th>
       <th>nums</th>
+      <th>merge</th>
       </thead>
       <tbody>
       <tr>
@@ -70,6 +84,9 @@
                 <p>{{ nums|linebreaks }}</p>
               {% endautoescape %}
               {% endif %}
+          </td>
+          <td id="merge_text">
+
           </td>
       </tr>
       </tbody>

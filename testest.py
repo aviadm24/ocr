@@ -30,18 +30,15 @@ def is_num(text):
 # is_num(' סנטר א:א.ג בע"מ ח.פ. 515906196 עמ 518906196      8 טנטר 3   סה"כ לתשלום: 52,782.00')
 
 
-def is_date(string, fuzzy=True):
-    """
-    Return whether the string can be interpreted as a date.
-    :param string: str, string to check for date
-    :param fuzzy: bool, ignore unknown tokens in string if True
-    """
-    try:
-        parse(string, fuzzy=fuzzy)
+def is_date(text):
+    r = re.compile(r'(^[0-9]+/[0-9]+/[0-9]+$)')
+    if re.findall(r, text):
         return True
-
-    except ValueError:
+    else:
         return False
+
+
+# print(is_date('0/09.2019'))
 
 # not used
 # def closest_date(text):
@@ -141,7 +138,7 @@ def close_match(text, answers, cache):
 
 def boxes():
     # https: // stackoverflow.com / questions / 20831612 / getting - the - bounding - box - of - the - recognized - words - using - python - tesseract
-    img = cv2.imread('images/8.jpg')
+    img = cv2.imread('images/1.png')
     height = img.shape[0]
     width = img.shape[1]
 
@@ -165,25 +162,32 @@ def boxes():
 
 def data():
     # https://stackoverflow.com/questions/20831612/getting-the-bounding-box-of-the-recognized-words-using-python-tesseract
-    img = cv2.imread('images/8.jpg')
-    d = pytesseract.image_to_data(img, lang='heb', output_type=Output.DICT)
-    n_boxes = len(d['text'])
+    img = cv2.imread('images/1.png')
+    # heb = pytesseract.image_to_data(img, lang='heb', output_type=Output.DICT)
+    digit = pytesseract.image_to_data(img, config='digits', output_type=Output.DICT)
+
+    n_boxes = len(digit['text'])
     # print(d.keys())
-    line_dict = {key: [] for key in d['line_num']}
+    line_dict = {key: [] for key in digit['line_num']}
     # line_dict.fromkeys(d['line_num'])
     # line_list = []
     for i in range(n_boxes):
-        block_num = d['block_num'][i]
-        line_num = d['line_num'][i]
-        text = d['text'][i]
+        block_num = digit['block_num'][i]
+        line_num = digit['line_num'][i]
+        text = digit['text'][i]
         if text != '':
             line_dict[line_num].append(text)
 
-        (x, y, w, h) = (d['left'][i], d['top'][i], d['width'][i], d['height'][i])
+        (x, y, w, h) = (digit['left'][i], digit['top'][i], digit['width'][i], digit['height'][i])
         # print('{} - x1:{}, y2:{}, x2:{}, y1:{} - level:{}, conf:{}, block_num:{}, par_num:{}, line_num:{}, word_num:{}'.
         #       format(d['text'][i], x, y, w, h, d['level'][i], d['conf'][i], block_num, d['par_num'][i],
         #              line_num, d['word_num'][i])
         #       )
+        try:
+            float(digit['text'][i])
+            print(digit['text'][i])
+        except:
+            pass
         cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
         cv2.putText(img, str(line_num), (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
     # print(line_dict)
@@ -194,13 +198,14 @@ def data():
         if line != []:
             close_match(' '.join(line), answers, cache)
     print('answers: ', answers)
-    # height, width = img.shape[:2]
-    # cv2.namedWindow('img', cv2.WINDOW_NORMAL)
-    # cv2.resizeWindow('img', width, height)
-    # cv2.imshow('img', img)
-    # cv2.waitKey(0)
 
-data()
+    height, width = img.shape[:2]
+    cv2.namedWindow('img', cv2.WINDOW_NORMAL)
+    cv2.resizeWindow('img', width, height)
+    cv2.imshow('img', img)
+    cv2.waitKey(0)
+
+# data()
 
 
 def digits():
@@ -209,3 +214,38 @@ def digits():
     print(text)
 
 # digits()
+
+
+def heb_digit():
+    img = cv2.imread('images/7.jpg')
+    heb = pytesseract.image_to_data(img, lang='heb', output_type=Output.DICT)
+    digit = pytesseract.image_to_data(img, config='digits', output_type=Output.DICT)
+
+    heb_boxes = len(heb['text'])
+    digit_boxes = len(digit['text'])
+    print(heb_boxes, ' - ', digit_boxes)
+    lines = []
+    for i in range(heb_boxes):
+        for j in range(digit_boxes):
+
+            # (x, y, w, h) = (digit['left'][i], digit['top'][i], digit['width'][i], digit['height'][i])
+
+            text_pixels = (heb['left'][i], heb['top'][i], heb['width'][i], heb['height'][i])
+            digit_pixels = (digit['left'][j], digit['top'][j], digit['width'][j], digit['height'][j])
+            if digit_pixels == text_pixels:
+                text = heb['text'][i]
+                num = digit['text'][j]
+                if text != '':
+                    print('text: ', heb['text'][i], ' - digit: ', digit['text'][j])
+                    if is_date(text):
+                        lines.append(text)
+                    else:
+                        try:
+                            if float(num):
+                                lines.append(num)
+                                lines.append('\n')
+                        except ValueError:
+                            lines.append(text)
+    # print(' '.join(lines))
+
+heb_digit()

@@ -22,5 +22,6 @@ urlpatterns = [
     path('', views.home),
     path('image_upload/', views.image_upload, name='upload'),
     path('get_params/', views.get_params),
-    path('ocr_output/', views.ocr_output)
+    path('ocr_output/', views.ocr_output),
+    path('merge/', views.merge)
 ]

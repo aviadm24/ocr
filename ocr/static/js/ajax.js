@@ -16,4 +16,20 @@ $(document).ready(function() {
                     }
                  })
              });
+
+             $('#merge').click(function() {
+                 var data = '';
+                 $.ajax({
+                     type: 'POST',
+                     url: '/merge/',
+                     data: data,
+                     processData: false,
+                     contentType: false,
+                     success: function(data) {
+                        $.each(data.merge, function(n, line) {
+                          $("#merge_text").append("<p>"+line+"</p>")
+                        })
+                     }
+                 })
+             });
          });
