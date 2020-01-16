@@ -5,3 +5,5 @@ migrations/
 .idea
 requirements.txt
 overflow/
+packages-microsoft-prod.deb
+csharp/

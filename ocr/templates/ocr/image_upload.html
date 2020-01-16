@@ -56,21 +56,21 @@
     {% if uploaded_file_url %}
         <table>
       <thead>
-      <th>file</th>
+      <!--<th>file</th>-->
       <th>ocr</th>
       <th>nums</th>
       <th>merge</th>
       </thead>
       <tbody>
       <tr>
-          <td>
+          <!--<td>-->
 
-                <p>File uploaded at: <a href="{% static uploaded_file_url %}">{{ uploaded_file_url }}</a></p>
-                <img src="{% static uploaded_file_url %}" height="1000" width="800">
-              <!--<img src="/{{ uploaded_file_url }}" height="1000" width="800">-->
-              <!--<img src="{{ uploaded_file_url }}" height="1000" width="800">-->
+                <!--<p>File uploaded at: <a href="{% static uploaded_file_url %}">{{ uploaded_file_url }}</a></p>-->
+                <!--<img src="{% static uploaded_file_url %}" height="1000" width="800">-->
+              <!--&lt;!&ndash;<img src="/{{ uploaded_file_url }}" height="1000" width="800">&ndash;&gt;-->
+              <!--&lt;!&ndash;<img src="{{ uploaded_file_url }}" height="1000" width="800">&ndash;&gt;-->
 
-          </td>
+          <!--</td>-->
           <td>
               {% if text %}
               {% autoescape off %}

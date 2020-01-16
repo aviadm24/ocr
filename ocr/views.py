@@ -101,7 +101,7 @@ def image_upload(request):
         return render(request, 'ocr/image_upload.html', {
             'text': text,
             'nums': nums,
-            'answers': word_list_dict,
+            # 'answers': word_list_dict,
             'uploaded_file_url': uploaded_file_url
         })
 
