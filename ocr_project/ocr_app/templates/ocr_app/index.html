@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR Missing Letters Detector</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'ocr_app/css/style.css' %}">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12 text-center mb-4">
+                <h1>OCR Missing Letters Detector</h1>
+                <p class="lead">Upload an image to detect missing or low confidence letters</p>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Upload Image</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="uploadForm" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="imageInput" class="form-label">Choose an image with text</label>
+                                <input class="form-control" type="file" id="imageInput" name="image" accept="image/*">
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary" id="processButton">Process Image</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="loadingIndicator" class="text-center d-none">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p>Processing image... Please wait.</p>
+                </div>
+
+                <div id="resultsContainer" class="d-none">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5>OCR Results</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Original Image</h6>
+                                    <img id="originalImage" class="img-fluid mb-3 border" alt="Original Image">
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Processed Image</h6>
+                                    <img id="processedImage" class="img-fluid mb-3 border" alt="Processed Image">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <h6>Extracted Text</h6>
+                                <div id="extractedText" class="p-3 bg-light border rounded"></div>
+                            </div>
+
+                            <div class="mb-3" id="missingLettersSection">
+                                <h6>Potential Missing or Low Confidence Letters</h6>
+                                <div id="missingLettersList" class="p-3 bg-light border rounded"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5>Confidence Analysis</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="confidenceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"></script>
+    <script src="{% static 'ocr_app/js/main.js' %}"></script>
+</body>
+</html>

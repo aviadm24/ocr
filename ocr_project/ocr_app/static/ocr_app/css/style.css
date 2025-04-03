@@ -1,0 +1,28 @@
+.ocr-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+#extractedText {
+    white-space: pre-wrap;
+    font-family: monospace;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#missingLettersList {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.high-confidence {
+    color: green;
+}
+
+.medium-confidence {
+    color: orange;
+}
+
+.low-confidence {
+    color: red;
+}
