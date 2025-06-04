@@ -26,3 +26,23 @@
 .low-confidence {
     color: red;
 }
+
+.text-hebrew {
+    direction: rtl;
+    text-align: right;
+    font-family: 'SBL Hebrew', 'Times New Roman', serif;
+    font-size: 1.2rem;
+    line-height: 1.8;
+}
+
+.hebrew-letter {
+    font-size: 1.5rem;
+    padding: 2px;
+    margin: 0 2px;
+}
+
+.letter-issue {
+    border: 1px solid #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+    border-radius: 4px;
+}

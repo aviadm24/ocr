@@ -567,11 +567,11 @@ def main(train=False):
         cv2.putText(doc_img, letter, pos, cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 3)
     
     # Save test document
-    cv2.imwrite("test_document.png", doc_img)
+    cv2.imwrite("images/test_document.png", doc_img)
     
     # Process document
     result_img, text = ocr.process_document("test_document.png")
-    cv2.imwrite("result_document.png", result_img)
+    cv2.imwrite("images/result_document.png", result_img)
     
     print(f"Recognized text: {text}")
     print("Results saved as 'result_document.png'")
@@ -631,7 +631,7 @@ def process(image_path):
         cv2.rectangle(result_image, (x, y), (x + w, y + h), color, 2)
         cv2.putText(result_image, f"{letter} ({confidence:.2f})", (x, y - 10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
-    cv2.imwrite("result_document.png", result_image)
+    cv2.imwrite("images/result_document.png", result_image)
     text = ''.join(recognized_chars)
     print(text)
 

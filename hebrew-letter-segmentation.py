@@ -146,7 +146,8 @@ def segment_hebrew_text(image_path, visualize=True):
     model = models.load_model('hebrew_ocr_model.h5')
     # Load and preprocess
     original, binary = preprocess_image(image_path)
-    cv2.imshow('parsha', original)
+    if visualize:
+        cv2.imshow('parsha', original)
     # Segment lines
     line_images, line_boundaries = segment_lines_advanced(binary)
     
@@ -184,12 +185,14 @@ def segment_hebrew_text(image_path, visualize=True):
             pred_class = np.argmax(pred)
             confidence = pred[pred_class]
             letter = heb_dict.get(pred_class, str(pred_class))
-            cv2.imshow(letter, char_img)
-            k = cv2.waitKey(0)
-            cv2.destroyAllWindows()
+            if visualize:
+                cv2.imshow(letter, char_img)
+                k = cv2.waitKey(0)
+                cv2.destroyAllWindows()
             # save_path = os.path.join('segmented_letters', f'line_{i}_char_{j}.png')
             # cv2.imwrite(save_path, char_img)
-    cv2.destroyAllWindows()
+    if visualize:
+        cv2.destroyAllWindows()
     # Prepare all characters for recognition
     prepared_chars = [prepare_for_recognition(char) for char in all_chars]
     
