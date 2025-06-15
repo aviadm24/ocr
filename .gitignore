@@ -3,3 +3,9 @@
 /segmented_letters/
 /segmented_lines/
 /hebrew_letters_dataset/
+__pycache__/
+processed/
+traindata/
+preprocessed/
+uploads/
+tesseract_hebrew_training/
