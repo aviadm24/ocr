@@ -49,27 +49,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function displayResults(data) {
         // Display images
-        document.getElementById('originalImage').src = data.original_image_url;
-        document.getElementById('processedImage').src = data.processed_image_url;
+        // document.getElementById('originalImage').src = data.original_image_url;
+        // document.getElementById('processedImage').src = data.processed_image_url;
 
         // Display extracted text
+        console.log('Extracted Text:', data.ocr_text);
         const extractedTextDiv = document.getElementById('extractedText');
         extractedTextDiv.textContent = data.ocr_text;
         extractedTextDiv.classList.toggle('text-hebrew', hebrewCheckbox.checked);
 
         // Display missing letters
-        displayMissingLetters(data.missing_letters);
+        // displayMissingLetters(data.missing_letters);
 
         // Display Torah-specific issues if available
-        if (data.torah_specific_issues && data.torah_specific_issues.length > 0) {
-            displayTorahIssues(data.torah_specific_issues);
-            torahIssuesSection.classList.remove('d-none');
-        } else {
-            torahIssuesSection.classList.add('d-none');
-        }
+        // if (data.torah_specific_issues && data.torah_specific_issues.length > 0) {
+        //     displayTorahIssues(data.torah_specific_issues);
+        //     torahIssuesSection.classList.remove('d-none');
+        // } else {
+        //     torahIssuesSection.classList.add('d-none');
+        // }
 
         // Create confidence chart
-        createConfidenceChart(data.confidence_data);
+        // createConfidenceChart(data.confidence_data);
 
         // Show results container
         resultsContainer.classList.remove('d-none');

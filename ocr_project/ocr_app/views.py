@@ -51,8 +51,8 @@ def process_image(request):
         # Update the model with results
         ocr_image.processed_image = results['processed_image_path']
         ocr_image.ocr_text = results['ocr_text']
-        ocr_image.missing_letters = results['missing_letters']
-        ocr_image.confidence_data = results['confidence_data']
+        # ocr_image.missing_letters = results['missing_letters']
+        # ocr_image.confidence_data = results['confidence_data']
         ocr_image.save()
 
         response_data = {
@@ -60,8 +60,8 @@ def process_image(request):
             'data': {
                 'id': ocr_image.id,
                 'ocr_text': ocr_image.ocr_text,
-                'missing_letters': ocr_image.missing_letters,
-                'confidence_data': ocr_image.confidence_data,
+                # 'missing_letters': ocr_image.missing_letters,
+                # 'confidence_data': ocr_image.confidence_data,
                 'processed_image_url': ocr_image.processed_image.url,
                 'original_image_url': ocr_image.image.url,
             }
@@ -72,7 +72,7 @@ def process_image(request):
             response_data['data']['torah_specific_issues'] = ocr_image.torah_specific_issues
             if ocr_image.preprocessed_image:
                 response_data['data']['preprocessed_image_url'] = ocr_image.preprocessed_image.url
-
+        print("Response Data:", response_data)
         return JsonResponse(response_data)
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
