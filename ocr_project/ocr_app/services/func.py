@@ -8,13 +8,6 @@ from tensorflow.keras import layers, models
 from django.conf import settings
 MODEL_PATH = os.path.join(settings.BASE_DIR, 'ocr_app', 'model', 'hebrew_ocr_model.h5')
 
-hebrew_chars_dict = {
-        0: 'ב', 1: 'כ', 2: 'פ', 3: 'ך', 4: 'ה', 5: 'ר', 6: 'ף', 7: 'ח', 8: 'מיקס',
-        9: 'צ', 10: 'ק', 11: 'ט', 12: 'נ', 13: 'ת', 14: 'ג', 15: 'ן', 16: 'ם',
-        17: 'ע', 18: 'י', 19: 'ד', 20: 'חצי-ק', 21: 'זבל', 22: 'ל', 23: 'א', 24: 'ז',
-        25: 'ש', 26: 'זבל', 27: 'לא ידוע', 28: 'ו', 29: 'מ', 30: 'ץ', 31: 'ס'
-    }
-
 
 def tf_model_predict_single(model=None, char_img=None):
     def switch_colors(image):
@@ -75,6 +68,7 @@ def preprocess_image(image_path):
     binary = cv2.morphologyEx(binary, cv2.MORPH_OPEN, kernel)
 
     return img, binary
+
 
 def segment_lines_advanced(binary_image, prominence_threshold=0.1, min_line_height=10):
     """
@@ -155,35 +149,6 @@ def segment_lines_advanced(binary_image, prominence_threshold=0.1, min_line_heig
             line_boundaries_original.append((start, end))
 
         return line_images_original, line_boundaries_original
-
-    return line_images, line_boundaries
-
-
-def segment_lines(binary_image):
-    # Find horizontal projection profile
-    h_projection = np.sum(binary_image, axis=1)
-
-    # Find line boundaries
-    line_boundaries = []
-    in_line = False
-    start = 0
-
-    for i, count in enumerate(h_projection):
-        if count > 0 and not in_line:
-            in_line = True
-            start = i
-        elif count == 0 and in_line:
-            in_line = False
-            line_boundaries.append((start, i))
-
-    # Handle case where the last line extends to the bottom of the image
-    if in_line:
-        line_boundaries.append((start, len(h_projection)))
-
-    # Extract line images
-    line_images = []
-    for start, end in line_boundaries:
-        line_images.append(binary_image[start:end, :])
 
     return line_images, line_boundaries
 
@@ -279,14 +244,6 @@ def segment_characters_advanced(line_image, min_area=50, max_area=2000):
     return char_images, char_positions
 
 
-def get_heb_dict():
-    print(os.getcwd())
-    with open('hebrew_ocr_model.h5_classes.txt') as f:
-        heb_dict = {}
-        for line in f.readlines():
-            line = line.split(',')
-            heb_dict[int(line[0])] = line[1]
-    return heb_dict
 hebrew_chars = {
         0: 'ב', 1: 'כ', 2: 'פ', 3: 'ך', 4: 'ה', 5: 'ר', 6: 'ף', 7: 'ח', 8: 'מיקס',
         9: 'צ', 10: 'ק', 11: 'ט', 12: 'נ', 13: 'ת', 14: 'ג', 15: 'ן', 16: 'ם',
@@ -295,7 +252,6 @@ hebrew_chars = {
     }
 def pip_line(image_path):
     # Here you would load your trained model and predict on the prepared characters
-    heb_dict = get_heb_dict()
     model = models.load_model(MODEL_PATH)
     model.summary()
     img, preprocessed_image = preprocess_image(image_path)
@@ -305,9 +261,6 @@ def pip_line(image_path):
     text = []
     # Process each line
     for i, line_image in enumerate(line_images):
-        # line_save_path = os.path.join('segmented_lines', f'line_{i}.png')
-        # cv2.imwrite(line_save_path, line_image)
-        # Segment characters in the line
         char_images, char_positions = segment_characters_advanced(line_image)
         
         # Store with offset for the line position
@@ -337,10 +290,4 @@ def pip_line(image_path):
             print(f"Character {j}: {letter} (confidence: {confidence:.2f})")
             text.append(letter)
 
-    # text = []
-    # for line_image in line_images:
-    #     char_images, char_positions = segment_characters_advanced(line_image)
-    #     for char_img in char_images:
-    #         heb_letter = tf_model_predict_single(model, char_img)
-    #         text.append(heb_letter)
     return ','.join(text)
